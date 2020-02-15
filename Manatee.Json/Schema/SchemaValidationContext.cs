@@ -11,10 +11,10 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class SchemaValidationContext
 	{
-		private HashSet<string>? _evaluatedPropertyNames;
-		private HashSet<string>? _locallyEvaluatedPropertyNames;
-		private HashSet<int>? _validatedIndices;
-		private HashSet<int>? _locallyValidatedIndices;
+		private HashSet<string> _evaluatedPropertyNames;
+		private HashSet<string> _locallyEvaluatedPropertyNames;
+		private HashSet<int> _validatedIndices;
+		private HashSet<int> _locallyValidatedIndices;
 
 		/// <summary>
 		/// Gets or sets the local schema at this point in the validation.
@@ -113,10 +113,41 @@ namespace Manatee.Json.Schema
 			Root = source.Root;
 			RecursiveAnchor = source.RecursiveAnchor;
 			Instance = source.Instance;
-			EvaluatedPropertyNames.UnionWith(source.EvaluatedPropertyNames);
-			LocallyEvaluatedPropertyNames.UnionWith(source.LocallyEvaluatedPropertyNames);
-			ValidatedIndices.UnionWith(source.ValidatedIndices);
-			LocallyValidatedIndices.UnionWith(source.LocallyValidatedIndices);
+
+			
+			if (_evaluatedPropertyNames is null)
+			{
+				_evaluatedPropertyNames = new HashSet<string>(source.EvaluatedPropertyNames.AsEnumerable<string>());
+			}
+			else
+			{
+				_evaluatedPropertyNames.UnionWith(source.EvaluatedPropertyNames);
+			}
+			if (_locallyEvaluatedPropertyNames is null)
+			{
+				_locallyEvaluatedPropertyNames = new HashSet<string>(source.LocallyEvaluatedPropertyNames.AsEnumerable<string>());
+			}
+			else
+			{
+				_locallyEvaluatedPropertyNames.UnionWith(source.LocallyEvaluatedPropertyNames);
+			}
+			if (_validatedIndices is null) {
+				_validatedIndices = new HashSet<int>(source.ValidatedIndices.AsEnumerable<int>());
+			}
+			else
+			{
+				_validatedIndices.UnionWith(source.ValidatedIndices);
+			}
+			if(_locallyValidatedIndices is null)
+			{
+				_locallyValidatedIndices = new HashSet<int>(source.LocallyValidatedIndices.AsEnumerable<int>());
+			}
+			else
+			{
+				_locallyValidatedIndices.UnionWith(source.LocallyValidatedIndices);
+			}
+			
+
 			LastEvaluatedIndex = source.LastEvaluatedIndex;
 			LocalTierLastEvaluatedIndex = source.LocalTierLastEvaluatedIndex;
 			BaseUri = source.BaseUri;
